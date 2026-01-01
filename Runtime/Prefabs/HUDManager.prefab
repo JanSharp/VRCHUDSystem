@@ -249,11 +249,15 @@ MonoBehaviour:
     SerializationNodes: []
   _udonSharpBackingUdonBehaviour: {fileID: 2493420935942964978}
   boneAttachment: {fileID: 0}
+  updateManager: {fileID: 0}
+  hudCanvas: {fileID: 4176325841430679021}
   vrRoot: {fileID: 2325647229806683803}
   vrRootGo: {fileID: 7008821540859189024}
-  desktopCanvas: {fileID: 4885584237486691362}
+  vrScaleTransform: {fileID: 380043638997846752}
+  desktopCanvasGo: {fileID: 4885584237486691362}
+  desktopCanvasRect: {fileID: 3661434286327622250}
   desktopPivot: {fileID: 6466193203704550859}
-  hudCanvas: {fileID: 4176325841430679021}
+  desktopScaleTransform: {fileID: 5393677678231890555}
 --- !u!114 &2493420935942964978
 MonoBehaviour:
   m_ObjectHideFlags: 0

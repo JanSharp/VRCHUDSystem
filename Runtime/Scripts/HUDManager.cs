@@ -9,14 +9,27 @@ namespace JanSharp
     public class HUDManager : HUDManagerAPI
     {
         [HideInInspector][SerializeField][SingletonReference] private BoneAttachmentManager boneAttachment;
+        [HideInInspector][SerializeField][SingletonReference] private UpdateManager updateManager;
+        /// <summary>
+        /// <para>Used by <see cref="UpdateManager"/>.</para>
+        /// </summary>
+        private int customUpdateInternalIndex;
+        public Transform hudCanvas;
         public Transform vrRoot;
         public GameObject vrRootGo;
-        public GameObject desktopCanvas;
+        public Transform vrScaleTransform;
+        public GameObject desktopCanvasGo;
+        public RectTransform desktopCanvasRect;
         public Transform desktopPivot;
-        public Transform hudCanvas;
+        public Transform desktopScaleTransform;
+        private float prevScreenHeight = -1f;
+
+        private const float VREyeHeightScaleMultiplier = 0.5f;
+        private const float DesktopScreenHeightScaleMultiplier = 1f / 1080f;
 
         private bool isInitialized;
         private bool isInVR;
+        private VRCPlayerApi localPlayer;
 
         private const int ElementIndex = 0;
         private const int ElementTransform = 1;
@@ -42,7 +55,8 @@ namespace JanSharp
             if (isInitialized)
                 return;
             isInitialized = true;
-            isInVR = Networking.LocalPlayer.IsUserInVR();
+            localPlayer = Networking.LocalPlayer;
+            isInVR = localPlayer.IsUserInVR();
             if (isInVR)
                 InitializeVR();
             else
@@ -51,7 +65,7 @@ namespace JanSharp
 
         private void InitializeVR()
         {
-            Destroy(desktopCanvas);
+            Destroy(desktopCanvasGo);
         }
 
         private void InitializeDesktop()
@@ -84,26 +98,33 @@ namespace JanSharp
         private void ShowHUD()
         {
             Initialize();
-            if (!isInVR)
-                desktopCanvas.SetActive(true);
-            else
+            if (isInVR)
             {
                 boneAttachment.AttachToLocalTrackingData(VRCPlayerApi.TrackingDataType.Head, vrRoot);
                 vrRoot.localPosition = Vector3.zero;
                 vrRoot.localRotation = Quaternion.identity;
                 vrRootGo.SetActive(true);
             }
+            else
+            {
+                updateManager.Register(this);
+                CustomUpdate();
+                desktopCanvasGo.SetActive(true);
+            }
         }
 
         private void HideHUD()
         {
             Initialize();
-            if (!isInVR)
-                desktopCanvas.SetActive(false);
-            else
+            if (isInVR)
             {
                 vrRootGo.SetActive(false);
                 boneAttachment.DetachFromLocalTrackingData(VRCPlayerApi.TrackingDataType.Head, vrRoot);
+            }
+            else
+            {
+                updateManager.Deregister(this);
+                desktopCanvasGo.SetActive(false);
             }
         }
 
@@ -183,6 +204,36 @@ namespace JanSharp
                 return;
             element[ElementIsShown] = false;
             HideElement(elementTransform);
+        }
+
+        public override void OnAvatarChanged(VRCPlayerApi player)
+        {
+            if (player.isLocal)
+                UpdateVRScale();
+        }
+
+        public override void OnAvatarEyeHeightChanged(VRCPlayerApi player, float prevEyeHeightAsMeters)
+        {
+            if (player.isLocal)
+                UpdateVRScale();
+        }
+
+        private void UpdateVRScale()
+        {
+            Initialize();
+            if (!isInVR)
+                return;
+            float eyeHeight = localPlayer.GetAvatarEyeHeightAsMeters();
+            vrScaleTransform.localScale = Vector3.one * (eyeHeight * VREyeHeightScaleMultiplier);
+        }
+
+        public void CustomUpdate()
+        {
+            float height = desktopCanvasRect.sizeDelta.y;
+            if (prevScreenHeight == height)
+                return;
+            prevScreenHeight = height;
+            desktopScaleTransform.localScale = Vector3.one * (height * DesktopScreenHeightScaleMultiplier);
         }
     }
 }
