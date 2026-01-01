@@ -1,0 +1,20 @@
+{
+  "name": "com.jansharp.hud-system",
+  "version": "0.1.0",
+  "description": "Manage UI elements intended to be in constant view of the player.",
+  "displayName": "HUD System",
+  "unity": "2022.3",
+  "author": {
+    "name": "JanSharp",
+    "email": "steinmeister36@gmail.com",
+    "url": "https://jansharp.github.io"
+  },
+  "dependencies": {},
+  "license": "MIT",
+  "vpmDependencies": {
+    "com.vrchat.worlds": "^3.7.4",
+    "com.jansharp.common": ">=1.3.0"
+  },
+  "url": "https://github.com/JanSharp/VRCHUDSystem/releases/download/v0.1.0/com.jansharp.hud-system.zip",
+  "changelogUrl": "https://github.com/JanSharp/VRCHUDSystem/blob/v0.1.0/CHANGELOG.md"
+}
