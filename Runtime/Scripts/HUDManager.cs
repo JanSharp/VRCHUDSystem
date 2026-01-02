@@ -83,7 +83,7 @@ namespace JanSharp
             {
                 object[] other = elements[index];
                 string otherOrder = (string)other[ElementOrder];
-                if (otherOrder.CompareTo(order) > 0)
+                if (otherOrder.CompareTo(order) <= 0)
                     break;
                 other[ElementIndex] = index + 1;
                 elements[index + 1] = other;
