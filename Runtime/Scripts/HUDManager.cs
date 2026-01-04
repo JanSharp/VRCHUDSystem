@@ -144,6 +144,9 @@ namespace JanSharp
 
         public override void AddHUDElement(Transform elementTransform, string order, bool isShown)
         {
+#if HUD_SYSTEM_DEBUG
+            Debug.Log($"[HUDSystemDebug] HUDManager  AddHUDElement - elementTransform.name: {elementTransform.name}");
+#endif
             if (elementsLut.ContainsKey(elementTransform))
             {
                 Debug.LogError($"[HUDSystem] Attempt to add the {elementTransform.name} hud element twice.");
@@ -159,10 +162,15 @@ namespace JanSharp
             elementTransform.SetSiblingIndex(index);
             if (isShown)
                 ShowElement(elementTransform);
+            else
+                elementTransform.gameObject.SetActive(false);
         }
 
         public override void RemoveHUDElement(Transform elementTransform)
         {
+#if HUD_SYSTEM_DEBUG
+            Debug.Log($"[HUDSystemDebug] HUDManager  RemoveHUDElement - elementTransform.name: {elementTransform.name}");
+#endif
             if (!elementsLut.Remove(elementTransform, out DataToken elementToken))
             {
                 Debug.LogError($"[HUDSystem] Attempt to remove the {elementTransform.name} hud element which was not added prior.");
@@ -180,6 +188,9 @@ namespace JanSharp
 
         public override void ShowHUDElement(Transform elementTransform)
         {
+#if HUD_SYSTEM_DEBUG
+            Debug.Log($"[HUDSystemDebug] HUDManager  ShowHUDElement - elementTransform.name: {elementTransform.name}");
+#endif
             if (!elementsLut.TryGetValue(elementTransform, out DataToken elementToken))
             {
                 Debug.LogError($"[HUDSystem] Attempt to show the {elementTransform.name} hud element which was not added prior.");
@@ -194,6 +205,9 @@ namespace JanSharp
 
         public override void HideHUDElement(Transform elementTransform)
         {
+#if HUD_SYSTEM_DEBUG
+            Debug.Log($"[HUDSystemDebug] HUDManager  HideHUDElement - elementTransform.name: {elementTransform.name}");
+#endif
             if (!elementsLut.TryGetValue(elementTransform, out DataToken elementToken))
             {
                 Debug.LogError($"[HUDSystem] Attempt to hide the {elementTransform.name} hud element which was not added prior.");

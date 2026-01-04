@@ -8,8 +8,8 @@ namespace JanSharp
     {
         /// <summary>
         /// <para>This function changes the parent of <paramref name="elementTransform"/>.</para>
-        /// <para>The HUD manager manges the active state of <paramref name="elementTransform"/>, pass this
-        /// function an inactive game object.</para>
+        /// <para>The HUD manager manges the active state of <paramref name="elementTransform"/>, the active
+        /// state will be overwritten.</para>
         /// </summary>
         /// <param name="elementTransform"></param>
         /// <param name="order"></param>
