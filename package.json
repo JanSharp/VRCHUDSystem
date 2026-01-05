@@ -10,6 +10,7 @@
     "url": "https://jansharp.github.io"
   },
   "dependencies": {},
+  "hideInEditor": false,
   "license": "MIT",
   "vpmDependencies": {
     "com.vrchat.worlds": "^3.7.4",
