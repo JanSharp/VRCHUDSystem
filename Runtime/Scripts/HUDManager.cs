@@ -18,6 +18,8 @@ namespace JanSharp
         public Transform vrRoot;
         public GameObject vrRootGo;
         public Transform vrScaleTransform;
+        private Vector3 defaultVRScaleTransformPosition;
+        private Vector3 defaultVRScaleTransformScale;
         public GameObject desktopCanvasGo;
         public RectTransform desktopCanvasRect;
         public Transform desktopPivot;
@@ -66,6 +68,8 @@ namespace JanSharp
         private void InitializeVR()
         {
             Destroy(desktopCanvasGo);
+            defaultVRScaleTransformPosition = vrScaleTransform.localPosition;
+            defaultVRScaleTransformScale = vrScaleTransform.localScale;
         }
 
         private void InitializeDesktop()
@@ -238,7 +242,12 @@ namespace JanSharp
             if (!isInVR)
                 return;
             float eyeHeight = localPlayer.GetAvatarEyeHeightAsMeters();
-            vrScaleTransform.localScale = Vector3.one * (eyeHeight * VREyeHeightScaleMultiplier);
+            float scale = eyeHeight * VREyeHeightScaleMultiplier;
+            // Cannot change the scale of the parent of this transform, for some reason it only ends up
+            // affecting the position while the sizing (scale) does not propagate through to the canvas.
+            // So we have to calculate the position and scale like this.
+            vrScaleTransform.localPosition = defaultVRScaleTransformPosition * scale;
+            vrScaleTransform.localScale = defaultVRScaleTransformScale * scale;
         }
 
         public void CustomUpdate()
