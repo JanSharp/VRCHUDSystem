@@ -1,6 +1,7 @@
 
 - [x] change scale in VR based on eye height
-  - [ ] tweak scale multiplier
-- [ ] position VR pivot properly
+  - [x] tweak scale multiplier
+- [x] position VR pivot properly
 - [x] change desktop scale on resolution change
-  - [ ] tweak scale multiplier
+  - [x] tweak scale multiplier
+- [ ] add material using vrc super sampled shader with a higher render queue to render over geometry for other systems to use
